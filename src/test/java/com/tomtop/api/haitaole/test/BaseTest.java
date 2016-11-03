@@ -1,10 +1,13 @@
-package com.tomtop.api.haitaole;
+package com.tomtop.api.haitaole.test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -26,6 +29,42 @@ import com.tomtop.api.utils.JaxbUtil.CollectionWrapper;
 
 public class BaseTest {
 	
+	@Test
+	public void test3()  {
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i=0; i<10; i++) {
+			list.add(i);
+		}
+		Collections.shuffle(list);
+		int first = list.get(0);
+		System.out.println("洗牌过后list中的第一个元素是： " + first);
+		for (int i=1, len = list.size(); i < list.size(); i++) {
+			int num = list.get(i);
+			if (num != 0) {
+				System.out.println(first/num);
+			}else {
+				System.out.println("被除数 不能为 0 ！第"+i+"个元素计算失败!");
+			}
+		}
+	}
+	
+	@Test
+	public void test2()  {
+		int countOfZone = 0;
+		String str = null;
+		int start = 0;
+		int end = 10000;
+		for (int i=start ; i <= end ; i++) {
+			str = String.valueOf(i); // 把数字转化为字符号对象
+			char[] charArr = str.toCharArray();
+			for (int j=0; j < charArr.length; j++) {
+				if (charArr[j] == '0') {// 字符0的ascii码为48
+					countOfZone ++;
+				}
+			}
+		}
+		System.out.println(start+"~"+end + " 之间 0 的有多少个  : "+countOfZone);
+	}
 	
 	@Test
 	public void testXmlToBean() throws JAXBException {
@@ -123,7 +162,7 @@ public class BaseTest {
 		
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(HaiTaoLeOrder.class);
-			String orderXml = JaxbUtil.beanToXml(haiTaoLeOrder, jaxbContext, null);
+			String orderXml = JaxbUtil.beanToXml(jaxbContext,haiTaoLeOrder, null);
 			System.out.println(orderXml);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block

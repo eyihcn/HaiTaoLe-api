@@ -74,7 +74,7 @@ public class JaxbUtil {
 	public static Marshaller createMarshaller(JAXBContext jaxbContext, String encoding) {
 		try {
 			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			if (StringUtils.isNotBlank(encoding)) {
 				marshaller.setProperty(Marshaller.JAXB_ENCODING, encoding);
 			}

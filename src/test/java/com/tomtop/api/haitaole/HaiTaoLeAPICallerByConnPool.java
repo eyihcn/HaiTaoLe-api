@@ -3,7 +3,6 @@ package com.tomtop.api.haitaole;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -27,10 +26,10 @@ import com.tomtop.api.utils.HaiTaoLeUtils;
 import com.tomtop.api.utils.JaxbUtil;
 import com.tomtop.api.utils.JaxbUtil.CollectionWrapper;
 
-public class HaiTaoLeAPICaller {
-
-	final Logger log = LoggerFactory.getLogger(HaiTaoLeAPICaller.class);
+public class HaiTaoLeAPICallerByConnPool {
 	
+	final Logger log = LoggerFactory.getLogger(HaiTaoLeAPICallerByConnPool.class);
+
 	private static MultiValueMap<String, Object> headers;
 	private static Map<String,JAXBContext> beanNameToJAXBContextMapCache;
 	static {
@@ -47,36 +46,19 @@ public class HaiTaoLeAPICaller {
 			throw new RuntimeException(e);
 		}
 	}
+	
 	@Autowired
-	@Qualifier("restTemplate")
+	@Qualifier("restTemplateConnPool")
 	private  RestTemplate restTemplate;
 	
-//	private static final String secretKey = "5b1ffb33617016a0f5c9a2cf0d0cdcd6"; //test
-//	private static final String allianceCode = "9NHP5U4NL7EL03WR";// test
-	
-	private  String secretKey = "da67de7c71058c47def72d718cde5b66";
-	private  String allianceCode = "ZTWNIYFZOWSCRL27";
-	
-	private static final String orderUrl_test = "http://58.22.126.78:6542/apis/alliances/order/standard_accept_order";//test
-	private static final String orderUrl = "http://www.haitaole.com/apis/alliances/order/standard_accept_order";//
+	private  String secretKey = "5b1ffb33617016a0f5c9a2cf0d0cdcd6";
+	private  String allianceCode = "9NHP5U4NL7EL03WR";
+	private  String orderUrl_test = "http://58.22.126.78:6542/apis/alliances/order/standard_accept_order";//test
+	private  String orderUrl = "http://www.haitaole.com/apis/alliances/order/standard_accept_order";//
 
-	private static final String shipUrl_test = "http://58.22.126.78:6542/apis/alliances/shipping/get_shipping";//test
-	private static final String shipUrl = "http://www.haitaole.com/apis/alliances/shipping/get_shipping";//
-
-	private static final String queryProductUrl_test = "http://58.22.126.78:6542/apis/alliances/product/search";//test
-	private static final String queryProductUrl = "http://www.haitaole.com/apis/alliances/product/search";//
+	private  String shipUrl_test = "http://58.22.126.78:6542/apis/alliances/shipping/get_shipping";//test
+	private  String shipUrl = "http://www.haitaole.com/apis/alliances/shipping/get_shipping";//
 	
-	public String queryHaiTaoLeProductInfo(Set<String> skuSet){
-		
-//		String orderXml =  JaxbUtil.beanToXml(beanNameToJAXBContextMapCache.get(HaiTaoLeOrder.class.getName()), haiTaoLeOrder, null);
-		if (CollectionUtils.isEmpty(skuSet) || skuSet.size() > 100) {
-			throw  new IllegalArgumentException("一次最多100个商品SKU");
-		}
-		Map<String, String> paramMap = _generateCommonParam();
-		paramMap.put("skus", HaiTaoLeUtils.iterableToString(skuSet));
-		// 拼接post请求的body
-		return _request(queryProductUrl, _generateRequestBody(paramMap));
-	}
 	
 	public String pushOrders(HaiTaoLeOrder haiTaoLeOrder){
 		
@@ -117,12 +99,12 @@ public class HaiTaoLeAPICaller {
 		reqMap.put("sign", sign);
 		reqMap.put("orders_info", queryOrdersInfosXml);
 		// 拼接post请求的body
-		return _request(shipUrl, _generateRequestBody(reqMap));
+		return _request(shipUrl_test, _generateRequestBody(reqMap));
 	}
 	
 	private String _request(String requestUrl, String requestBody){
 		
-		log.info(new StringBuilder(" requestUrl: ").append(requestUrl).append(" ;reqBody : ").append(requestBody).toString());
+		log.info(new StringBuilder(" requestUrl: === ").append(requestUrl).append(" ;reqBody : === ").append(requestBody).toString());
 		HttpEntity httpEntity = new HttpEntity(requestBody, headers);
 		String xmlStr = restTemplate.postForObject(requestUrl, httpEntity, String.class);
 		log.info(xmlStr);
@@ -144,22 +126,5 @@ public class HaiTaoLeAPICaller {
 		
 	}
 	
-	private Map<String, String> _generateCommonParam() {
-		return generateCommonParam(this.allianceCode, this.secretKey);
-	}
 	
-	/**
-	 * 生成 api接口请求的的公共参数 request_time，alliance_code，sign
-	 * @return
-	 */
-	public Map<String, String> generateCommonParam(String allianceCode, String secretKey) {
-		String requestTime = DateUtils.currentDatetime();
-		// 生成签名
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(allianceCode, requestTime, secretKey);  
-		Map<String, String> paramMap = Maps.newHashMap();
-		paramMap.put("request_time", requestTime);
-		paramMap.put("alliance_code", allianceCode);
-		paramMap.put("sign", sign);
-		return paramMap;
-	}
 }

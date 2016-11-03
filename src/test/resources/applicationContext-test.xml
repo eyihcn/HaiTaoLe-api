@@ -3,12 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" 
-	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
-	http://www.springframework.org/schema/data/mongo  
-	http://www.springframework.org/schema/data/mongo/spring-mongo-1.8.xsd
     http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
     default-autowire="byName" default-lazy-init="true">
@@ -20,9 +17,9 @@
 	<!--使用httpclient的实现，带连接池-->
     <bean id="pollingConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
         <!--整个连接池的并发-->
-        <property name="maxTotal" value="1000" />
+        <property name="maxTotal" value="50" />
         <!--每个主机的并发-->
-        <property name="defaultMaxPerRoute" value="1000" />
+        <property name="defaultMaxPerRoute" value="5" />
     </bean>
 
     <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder" factory-method="create">
@@ -57,16 +54,16 @@
     <bean id="clientHttpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
         <constructor-arg ref="httpClient"/>
         <!--连接超时时间，毫秒-->
-        <property name="connectTimeout" value="5000"/>
+        <property name="connectTimeout" value="10000"/>
         <!--读写超时时间，毫秒-->
         <property name="readTimeout" value="10000"/>
     </bean>
 
     <bean id="restTemplateConnPool" class="org.springframework.web.client.RestTemplate">
         <constructor-arg ref="clientHttpRequestFactory"/>
-        <property name="errorHandler">
-            <bean class="org.springframework.web.client.DefaultResponseErrorHandler"/>
-        </property>
+<!--         <property name="errorHandler"> -->
+<!--             <bean class="org.springframework.web.client.DefaultResponseErrorHandler"/> -->
+<!--         </property> -->
 <!--         <property name="messageConverters"> -->
 <!--             <list> -->
 <!--                 <bean class="org.springframework.http.converter.FormHttpMessageConverter"/> -->
@@ -84,5 +81,8 @@
     </bean>
     
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+	
+	<bean id="haiTaoLeAPICaller" class="com.tomtop.api.haitaole.HaiTaoLeAPICaller" />
+	<bean id="haiTaoLeAPICallerByConnPool" class="com.tomtop.api.haitaole.HaiTaoLeAPICallerByConnPool" />
 	
 </beans>

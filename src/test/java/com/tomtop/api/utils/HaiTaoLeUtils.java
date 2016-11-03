@@ -2,6 +2,7 @@ package com.tomtop.api.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class HaiTaoLeUtils {
 
+	public static final String COMMA = ","; // 半角逗号
+	
+	
 	/**
 	 * MD5 ( alliance_code + "|" + request_time + "|" + secret_key )
 	 * 其中secret_key为海淘乐分配给各合作商户的32位的商户密钥，系统分配
@@ -72,4 +76,24 @@ public class HaiTaoLeUtils {
 	      } 
 	      return "";
 	}
+
+
+	/**返回逗号分隔的字符串*/
+	public static String iterableToString(Iterable<?> elements) {
+		if (null == elements) {
+			return null;
+		}
+		StringBuilder strSplitByComma = new StringBuilder();
+		Iterator<?> ite = elements.iterator();
+		if(ite.hasNext()) {
+			strSplitByComma.append(ite.next());
+			for (; ite.hasNext() ;) {
+				strSplitByComma.append(COMMA).append(ite.next().toString());
+			}
+		}else {
+			return null;
+		}
+		return strSplitByComma.toString();
+	}
+	
 }

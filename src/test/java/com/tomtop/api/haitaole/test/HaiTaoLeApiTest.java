@@ -1,4 +1,4 @@
-package com.tomtop.api.haitaole;
+package com.tomtop.api.haitaole.test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +48,6 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 	@Qualifier("restTemplateConnPool")
 	RestTemplate restTemplateConnPool;
 
-	@Autowired
-	@Qualifier("httpClient")
-	CloseableHttpClient httpClient;
-
 	@Test
 	public void testAutowiredByName() {
 		log.info(this.restTemplate.getRequestFactory().getClass().toString());
@@ -61,7 +56,7 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 
 	// 正式环境：http://www.haitaole.com/apis/alliances/shipping/get_shipping
 	@Test
-	public void testShipApi() {
+	public void testShipApi_restTemplate() {
 		
 		String orders_info_Xml = readXml("C:\\Users\\Administrator\\Desktop\\orders_info.txt");
 		String alliance_code = "9NHP5U4NL7EL03WR";
@@ -74,11 +69,26 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 		req.put("request_time", request_time);
 		req.put("sign", sign);
 		HttpEntity httpEntity = new HttpEntity(generateRequestBody(req), headers);
-		log.info(httpEntity.toString());
 		String xmlStr = restTemplate.postForObject(shipUrl, httpEntity, String.class);
-		log.info(xmlStr);
 	}
-
+	
+	@Test
+	public void testShipApi_restTemplateConnPool() {
+		
+		String orders_info_Xml = readXml("C:\\Users\\Administrator\\Desktop\\orders_info.txt");
+		String alliance_code = "9NHP5U4NL7EL03WR";
+		String request_time = DateUtils.currentDatetime();
+		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(alliance_code, request_time, secretKey); //
+		
+		Map<String, String> req = new HashMap<String, String>();
+		req.put("orders_info", orders_info_Xml);
+		req.put("alliance_code", alliance_code);
+		req.put("request_time", request_time);
+		req.put("sign", sign);
+		HttpEntity httpEntity = new HttpEntity(generateRequestBody(req), headers);
+		String xmlStr = restTemplateConnPool.postForObject(shipUrl, httpEntity, String.class);
+	}
+	
 	// 正式环境：http://www.haitaole.com/apis/alliances/order/standard_accept_order
 	@Test
 	public void testOrderApi() {
