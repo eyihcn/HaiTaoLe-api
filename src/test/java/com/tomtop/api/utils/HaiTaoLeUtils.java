@@ -17,7 +17,7 @@ public class HaiTaoLeUtils {
 	 * MD5 ( alliance_code + "|" + request_time + "|" + secret_key )
 	 * 其中secret_key为海淘乐分配给各合作商户的32位的商户密钥，系统分配
 	 */
-	public static String generateHaiTaiLeSign(String allianceCode, String requestTime, String secretKey){
+	public static String generateHaiTaoLeSign(String allianceCode, String requestTime, String secretKey){
 		 
 		String plainText = allianceCode+"|"+requestTime+"|"+secretKey;
 		

@@ -25,7 +25,6 @@ public class JaxbUtil {
 			t = (T) unMarshaller.unmarshal(new StringReader(xml));
 			System.out.println(t);
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return t;

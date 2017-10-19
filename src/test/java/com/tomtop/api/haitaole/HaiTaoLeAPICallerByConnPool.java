@@ -66,7 +66,7 @@ public class HaiTaoLeAPICallerByConnPool {
 
 		String requestTime = DateUtils.currentDatetime();
 		// 生成签名
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(allianceCode, requestTime, secretKey);  
+		String sign = HaiTaoLeUtils.generateHaiTaoLeSign(allianceCode, requestTime, secretKey);  
 		Map<String, String> reqMap = Maps.newHashMap();
 		reqMap.put("request_time", requestTime);
 		reqMap.put("alliance_code", allianceCode);
@@ -92,7 +92,7 @@ public class HaiTaoLeAPICallerByConnPool {
 
 		String requestTime = DateUtils.currentDatetime();
 		// 生成签名
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(allianceCode, requestTime, secretKey);  
+		String sign = HaiTaoLeUtils.generateHaiTaoLeSign(allianceCode, requestTime, secretKey);  
 		Map<String, String> reqMap = Maps.newHashMap();
 		reqMap.put("request_time", requestTime);
 		reqMap.put("alliance_code", allianceCode);

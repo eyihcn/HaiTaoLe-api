@@ -59,9 +59,9 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 	public void testShipApi_restTemplate() {
 		
 		String orders_info_Xml = readXml("C:\\Users\\Administrator\\Desktop\\orders_info.txt");
-		String alliance_code = "9NHP5U4NL7EL03WR";
+		String alliance_code = "9NHP5U4NL7EL03WR"; // test
 		String request_time = DateUtils.currentDatetime();
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(alliance_code, request_time, secretKey); //
+		String sign = HaiTaoLeUtils.generateHaiTaoLeSign(alliance_code, request_time, secretKey); //
 		
 		Map<String, String> req = new HashMap<String, String>();
 		req.put("orders_info", orders_info_Xml);
@@ -78,7 +78,7 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 		String orders_info_Xml = readXml("C:\\Users\\Administrator\\Desktop\\orders_info.txt");
 		String alliance_code = "9NHP5U4NL7EL03WR";
 		String request_time = DateUtils.currentDatetime();
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(alliance_code, request_time, secretKey); //
+		String sign = HaiTaoLeUtils.generateHaiTaoLeSign(alliance_code, request_time, secretKey); //
 		
 		Map<String, String> req = new HashMap<String, String>();
 		req.put("orders_info", orders_info_Xml);
@@ -100,7 +100,7 @@ public class HaiTaoLeApiTest extends AbstractJUnit4SpringContextTests {
 		String orderXml = readXml("C:\\Users\\Administrator\\Desktop\\orderXml.txt");
 		String alliance_code = "9NHP5U4NL7EL03WR";
 		String request_time = DateUtils.currentDatetime();
-		String sign = HaiTaoLeUtils.generateHaiTaiLeSign(alliance_code, request_time, secretKey); //
+		String sign = HaiTaoLeUtils.generateHaiTaoLeSign(alliance_code, request_time, secretKey); //
 
 		StringBuilder reqBody = new StringBuilder();
 		reqBody.append("alliance_code=").append(alliance_code).append("&").append("request_time=").append(request_time)

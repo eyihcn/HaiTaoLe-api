@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
@@ -19,8 +20,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.google.common.collect.Lists;
 import com.tomtop.api.haitaole.HaiTaoLeAPICaller;
 import com.tomtop.api.haitaole.dto.HaiTaoLeProductInfoResponse;
+import com.tomtop.api.haitaole.dto.HaiTaoLeQueryOrderStatusInfo;
 import com.tomtop.api.haitaole.dto.HaiTaoLeQueryShipOrdersInfo;
 import com.tomtop.api.utils.JaxbUtil;
 
@@ -52,8 +55,13 @@ public class HaiTaoLeAPICallerTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testQueryHaiTaoLeProductInfo() throws JAXBException {
 		Set<String> skus = new HashSet<String>();
-		skus.add("1027004169");
+		skus.add("1045004389");
+		skus.add("1028004368");
+		skus.add("1028004041");
+		skus.add("1029003351");
+		skus.add("1030002513");
 //		skus.add("1046003765");
+		
 		// 1005004161  1046003765
 		String result = haiTaoLeAPICaller.queryHaiTaoLeProductInfo(skus);
 		JAXBContext jAXBContext = JAXBContext.newInstance(HaiTaoLeProductInfoResponse.class);
@@ -71,8 +79,19 @@ public class HaiTaoLeAPICallerTest extends AbstractJUnit4SpringContextTests {
 		// 43745261   43703025   43703026  43702283
 
 //		HaiTaoLeQueryShipOrdersInfo haiTaoLeQueryShipOrdersInfo = new HaiTaoLeQueryShipOrdersInfo(null,"43648758");
-		HaiTaoLeQueryShipOrdersInfo haiTaoLeQueryShipOrdersInfo1 = new HaiTaoLeQueryShipOrdersInfo(null,"43702283");
+		HaiTaoLeQueryShipOrdersInfo haiTaoLeQueryShipOrdersInfo1 = new HaiTaoLeQueryShipOrdersInfo(null,"46261387");
 		haiTaoLeAPICaller.queryShip(Arrays.asList(haiTaoLeQueryShipOrdersInfo1));
+	}
+	
+	@Test
+	public void testGetOrderStatus() {
+		// 43745261   43703025   43703026  43702283
+		// 46261387、46317973
+		 List<HaiTaoLeQueryOrderStatusInfo> queryOrderStatusList = Lists.newLinkedList();
+		 queryOrderStatusList.add(new HaiTaoLeQueryOrderStatusInfo(null, "46261387"));
+		 queryOrderStatusList.add(new HaiTaoLeQueryOrderStatusInfo(null, "46317973"));
+		 String haiTaoLeOrderStatusResponeXml =  haiTaoLeAPICaller.getOrderStatus(queryOrderStatusList);
+		 System.out.println(haiTaoLeOrderStatusResponeXml);
 	}
 	
 	@Test
